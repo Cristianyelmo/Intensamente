@@ -3,7 +3,7 @@ import * as faceapi from 'face-api.js';
 import './App.css';
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import * as THREE from "three";
-import { any } from 'three/webgpu';
+
 function App() {
   const imageRef = useRef<HTMLImageElement>(null);
 
@@ -13,7 +13,7 @@ function App() {
   const modelRef = useRef<THREE.Object3D | null>(null);
 const [position, setPosition] = useState<{ _x: number, _y: number }[]>([]); 
 const videoRef = useRef<HTMLVideoElement>(null);
-const [textureExpresion,setTextureExpresion] = useState('')
+const [textureExpresion, setTextureExpresion] = useState<{ expresion: string; positionsx: any[] } | null>(null);
 const [booleanThrejs,setBoleanThrejs]=useState(false)
 
 
@@ -168,18 +168,30 @@ const testapi = async (imageSrc: string ) => {
   }else{
     if( modelRef.current){
      
-      const texture = await processInfoFaceApi(imageSrc) || ''
-     setTextureExpresion(texture)
-      const tex = new THREE.TextureLoader().load(
-        `/texture/${texture.expresion}.png`
-      );
-    modelRef.current.traverse((node:any) => {
-      if (node.isMesh && node.name == "Cube") {
-        console.log('hola')
-          node.material.map = tex;
+      const result = await processInfoFaceApi(imageSrc);
+
+  
+      if (result && typeof result === 'object') {
+        setTextureExpresion(result);
+
+        const textureExpresion = result.expresion;
+        
       
+        const tex = new THREE.TextureLoader().load(
+          `/texture/${textureExpresion}.png`
+        );
+
+        modelRef.current?.traverse((node: any) => {
+          if (node.isMesh && node.name === 'Cube') {
+           
+            node.material.map = tex;
+          }
+        });
+      } else {
+      
+        console.error('Datos de textura no válidos:', result);
+        setTextureExpresion({ expresion: 'default', positionsx: [] });
       }
-    });
   }
   }
 
