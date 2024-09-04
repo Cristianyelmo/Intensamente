@@ -315,7 +315,7 @@ console.log(textureExpresion)
 
 
 
-<button onClick={CapturePhoto}>hola</button>
+
  <div className="relative bg-[#ed1699] w-[300px] h-[300px] ">
       <div className='bg-black w-[10px] h-[10px] absolute z-50 translate-example'></div> 
 
@@ -340,6 +340,7 @@ console.log(textureExpresion)
  
         className="absolute  z-10 w-full h-full" 
       /> 
+      <button onClick={CapturePhoto}  className="absolute  z-40 ">hola</button>
     </div> 
 
 
