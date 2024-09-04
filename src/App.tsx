@@ -340,10 +340,10 @@ console.log(textureExpresion)
  
         className="absolute  z-10 w-full h-full" 
       /> 
-      <button onClick={CapturePhoto}  className="absolute  z-40 ">hola</button>
+    
     </div> 
 
-
+    <button onClick={CapturePhoto}  className="absolute  z-40 ">hola</button>
   
     </div>
   );
