@@ -1,20 +1,24 @@
 import { useEffect, useState, useRef } from 'react';
 import * as faceapi from 'face-api.js';
 import './App.css';
-
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import * as THREE from "three";
 function App() {
   const imageRef = useRef<HTMLImageElement>(null);
-  const imageRef2 = useRef<HTMLImageElement>(null);
+
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const canvasRef2 = useRef<HTMLCanvasElement>(null);
+  const canvasRef3 = useRef<HTMLDivElement>(null);
 const [position, setPosition] = useState<{ _x: number, _y: number }[]>([]); 
 const videoRef = useRef<HTMLVideoElement>(null);
-const get2d2 = canvasRef.current?.getContext("2d");
-const [srcphoto,setsrcPhoto]=useState("/New Project(3).jpg")
-const testapi = async (imageSrc: string) => {
-  console.log(imageSrc);
-  console.log(imageRef.current)
+const [textureExpresion,setTextureExpresion] = useState('')
+const [booleanThrejs,setBoleanThrejs]=useState(false)
+
+
+const testapi = async (imageSrc: string ) => {
+  const processInfoFaceApi = async()=>{
   try {
+    
     if (canvasRef.current && imageRef.current) {
       const number = 300;
       canvasRef.current.width = number;
@@ -23,9 +27,11 @@ const testapi = async (imageSrc: string) => {
      
       if (imageRef.current) {
         console.log(imageRef.current)
+
+        if(imageSrc !== "no"){
         imageRef.current.src = imageSrc;
-        console.log(imageRef.current)
-  
+        console.log(imageRef.current) 
+      } 
 
         const fullFaceDescriptions = await faceapi.detectAllFaces(imageRef.current)
           .withFaceLandmarks()
@@ -35,6 +41,19 @@ const testapi = async (imageSrc: string) => {
         if (fullFaceDescriptions.length > 0) {
           const firstFaceDescription = fullFaceDescriptions[0];
           const landmarks = (firstFaceDescription as any).landmarks;
+const expresions = (firstFaceDescription as any).expressions
+console.log(expresions)
+let highestExpression = '';
+let highestValue = 0;
+for (const [expression, value] of Object.entries(expresions)) {
+  if (typeof value === 'number' && value > highestValue) {
+    highestExpression = expression;
+    highestValue = value;
+  }
+}
+setTextureExpresion(highestExpression)
+
+
 
           if (landmarks && landmarks.positions) {
             setPosition(landmarks.positions);
@@ -45,13 +64,113 @@ const testapi = async (imageSrc: string) => {
           console.error('No hay descripciones de rostro disponibles');
         }
 
-        faceapi.draw.drawFaceLandmarks(canvasRef.current, fullFaceDescriptions);
-        faceapi.draw.drawFaceExpressions(canvasRef.current, fullFaceDescriptions, 0.05);
+        /* faceapi.draw.drawFaceLandmarks(canvasRef.current, fullFaceDescriptions);
+        faceapi.draw.drawFaceExpressions(canvasRef.current, fullFaceDescriptions, 0.05); */
       }
     }
   } catch (error) {
     console.error('Error durante la detección facial:', error);
   }
+}
+
+
+processInfoFaceApi().then(() => {
+  console.log('hola prueba a ver que tal')
+  if(booleanThrejs == false ){
+    try {
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(
+        75,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        800
+      );
+      const renderer = new THREE.WebGLRenderer({ alpha: true });
+    
+      const container = canvasRef3.current;
+      const width = 300
+      const height = 300
+      renderer.setSize(width, height);
+    if(container){
+      container.appendChild(renderer.domElement);
+    }
+      camera.position.set(0, 20,100);
+         
+      camera.lookAt(0, 0, 0);
+    
+      const loader = new GLTFLoader();
+      loader.load(
+        "/3D/capS.glb",
+        function (gltf:any) {
+          const model = gltf.scene;
+          model.scale.set(10, 10, 10);
+          model.position.set(0, 0, 0);
+       console.log(model)
+    console.log(textureExpresion)
+          const tex = new THREE.TextureLoader().load(
+            `/texture/${textureExpresion}.png`
+          );
+    
+          tex.flipY = false;
+    
+          model.traverse((node:any) => {
+            if (node.isMesh && node.name == "Cube") {
+              console.log('hola')
+                node.material.map = tex;
+            
+            }
+          });
+     
+      
+         
+    
+         
+       scene.add(model);
+         
+         
+          const ambientLight = new THREE.AmbientLight(0xffffff, 2);
+          scene.add(ambientLight);
+         
+    
+          
+        },
+        undefined,
+        function (error:any) {
+          console.error(error);
+        }
+      );
+    
+      function animate() {
+        renderer.render(scene, camera);
+      }
+    
+      renderer.setAnimationLoop(animate);
+    
+      return () => {
+        renderer.setAnimationLoop(null);
+        if(container){
+        container.removeChild(renderer.domElement);
+      }
+        renderer.dispose();
+      };
+    } catch (error) {
+      
+    }finally{
+      setBoleanThrejs(true)
+    }
+ 
+
+
+  }
+
+
+
+
+
+}).catch((error) => {
+  console.error('Error en fetchData:', error);
+});
+
 };
 
   useEffect(() => {
@@ -71,7 +190,7 @@ const testapi = async (imageSrc: string) => {
     loadModels().then(() => {
     
 
-      testapi("/New Project(3).jpg");
+      testapi("no");
     }).catch((error) => {
       console.error('Error en fetchData:', error);
     });
@@ -124,7 +243,7 @@ const testapi = async (imageSrc: string) => {
       if (canvasRef2.current) {
         const dataURL = canvasRef2.current.toDataURL("image/png");
         console.log('Data URL:', dataURL);
-  
+        
       
         await testapi(dataURL)
       }  
@@ -165,6 +284,12 @@ const testapi = async (imageSrc: string) => {
 <button onClick={CapturePhoto}>hola</button>
  <div className="relative bg-[#ed1699] w-[300px] h-[300px] ">
       <div className='bg-black w-[10px] h-[10px] absolute z-50 translate-example'></div> 
+
+      <div 
+    
+        ref={canvasRef3} 
+        className="absolute top-0 z-30 w-[300px] h-[300px]" 
+      ></div>
       
       <canvas 
     
@@ -174,11 +299,11 @@ const testapi = async (imageSrc: string) => {
 
 
       <img 
-       
+       src="/New Project(3).jpg"
         width="300" 
         height="300" 
         ref={imageRef} 
-     /* onChange={handleImageLoad}  */
+ 
         className="absolute  z-10 w-full h-full" 
       /> 
     </div> 
