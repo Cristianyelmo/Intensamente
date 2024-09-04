@@ -3,79 +3,94 @@ import * as faceapi from 'face-api.js';
 import './App.css';
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import * as THREE from "three";
+import { any } from 'three/webgpu';
 function App() {
   const imageRef = useRef<HTMLImageElement>(null);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const canvasRef2 = useRef<HTMLCanvasElement>(null);
   const canvasRef3 = useRef<HTMLDivElement>(null);
+  const modelRef = useRef<THREE.Object3D | null>(null);
 const [position, setPosition] = useState<{ _x: number, _y: number }[]>([]); 
 const videoRef = useRef<HTMLVideoElement>(null);
 const [textureExpresion,setTextureExpresion] = useState('')
 const [booleanThrejs,setBoleanThrejs]=useState(false)
 
 
+
+
+
+
+
+
 const testapi = async (imageSrc: string ) => {
-  const processInfoFaceApi = async()=>{
-  try {
-    
-    if (canvasRef.current && imageRef.current) {
-      const number = 300;
-      canvasRef.current.width = number;
-      canvasRef.current.height = number;
-
-     
-      if (imageRef.current) {
-        console.log(imageRef.current)
-
-        if(imageSrc !== "no"){
-        imageRef.current.src = imageSrc;
-        console.log(imageRef.current) 
-      } 
-
-        const fullFaceDescriptions = await faceapi.detectAllFaces(imageRef.current)
-          .withFaceLandmarks()
-          .withFaceExpressions();
-        console.log(fullFaceDescriptions);
-
-        if (fullFaceDescriptions.length > 0) {
-          const firstFaceDescription = fullFaceDescriptions[0];
-          const landmarks = (firstFaceDescription as any).landmarks;
-const expresions = (firstFaceDescription as any).expressions
-console.log(expresions)
-let highestExpression = '';
-let highestValue = 0;
-for (const [expression, value] of Object.entries(expresions)) {
-  if (typeof value === 'number' && value > highestValue) {
-    highestExpression = expression;
-    highestValue = value;
-  }
-}
-setTextureExpresion(highestExpression)
-
-
-
-          if (landmarks && landmarks.positions) {
-            setPosition(landmarks.positions);
-          } else {
-            console.error('Landmarks o posiciones no están disponibles');
-          }
-        } else {
-          console.error('No hay descripciones de rostro disponibles');
-        }
-
-        /* faceapi.draw.drawFaceLandmarks(canvasRef.current, fullFaceDescriptions);
-        faceapi.draw.drawFaceExpressions(canvasRef.current, fullFaceDescriptions, 0.05); */
-      }
+  
+  const processInfoFaceApi = async(imageSrc:string)=>{
+    try {
+      
+      if (canvasRef.current && imageRef.current) {
+        const number = 300;
+        canvasRef.current.width = number;
+        canvasRef.current.height = number;
+  
+       
+        if (imageRef.current) {
+          console.log(imageRef.current)
+  
+          if(imageSrc !== "no"){
+          imageRef.current.src = imageSrc;
+          console.log(imageRef.current) 
+        } 
+  
+          const fullFaceDescriptions = await faceapi.detectAllFaces(imageRef.current)
+            .withFaceLandmarks()
+            .withFaceExpressions();
+          console.log(fullFaceDescriptions);
+  
+          if (fullFaceDescriptions.length > 0) {
+            const firstFaceDescription = fullFaceDescriptions[0];
+            const landmarks = (firstFaceDescription as any).landmarks;
+  const expresions = (firstFaceDescription as any).expressions
+  console.log(expresions)
+   let highestExpression = ''; 
+  let highestValue = 0;
+  for (const [expression, value] of Object.entries(expresions)) {
+    if (typeof value === 'number' && value > highestValue) {
+      highestExpression = expression;
+      highestValue = value;
     }
-  } catch (error) {
-    console.error('Error durante la detección facial:', error);
   }
-}
+
+  
+  
+            if (landmarks && landmarks.positions) {
+              setPosition(landmarks.positions);
+              const newobject= {
+                expresion:highestExpression,
+                positionsx:landmarks.positions
+              }
+              return newobject 
+            } else {
+              console.error('Landmarks o posiciones no están disponibles');
+            }
+          } else {
+            console.error('No hay descripciones de rostro disponibles');
+          }
+  
+          /* faceapi.draw.drawFaceLandmarks(canvasRef.current, fullFaceDescriptions);
+          faceapi.draw.drawFaceExpressions(canvasRef.current, fullFaceDescriptions, 0.05); */
+        }
+      }
+    } catch (error) {
+      console.error('Error durante la detección facial:', error);
+    }
+  }
 
 
-processInfoFaceApi().then(() => {
+
   console.log('hola prueba a ver que tal')
+  try {
+   
   if(booleanThrejs == false ){
     try {
       const scene = new THREE.Scene();
@@ -105,21 +120,10 @@ processInfoFaceApi().then(() => {
           const model = gltf.scene;
           model.scale.set(10, 10, 10);
           model.position.set(0, 0, 0);
+          modelRef.current = model;
        console.log(model)
-    console.log(textureExpresion)
-          const tex = new THREE.TextureLoader().load(
-            `/texture/${textureExpresion}.png`
-          );
-    
-          tex.flipY = false;
-    
-          model.traverse((node:any) => {
-            if (node.isMesh && node.name == "Cube") {
-              console.log('hola')
-                node.material.map = tex;
-            
-            }
-          });
+  
+         
      
       
          
@@ -161,15 +165,31 @@ processInfoFaceApi().then(() => {
  
 
 
+  }else{
+    if( modelRef.current){
+     
+      const texture = await processInfoFaceApi(imageSrc) || ''
+     setTextureExpresion(texture)
+      const tex = new THREE.TextureLoader().load(
+        `/texture/${texture.expresion}.png`
+      );
+    modelRef.current.traverse((node:any) => {
+      if (node.isMesh && node.name == "Cube") {
+        console.log('hola')
+          node.material.map = tex;
+      
+      }
+    });
+  }
+  }
+
+} catch (error) {
+    console.error('Error en fetchData:', error);
   }
 
 
 
 
-
-}).catch((error) => {
-  console.error('Error en fetchData:', error);
-});
 
 };
 
@@ -254,9 +274,10 @@ processInfoFaceApi().then(() => {
 
 
   
-
+console.log(textureExpresion)
    let keyframes;
-  if (position.length > 0) {
+   if(textureExpresion && textureExpresion.positionsx){
+  if (textureExpresion.positionsx.length > 0) {
     keyframes = `
       .translate-example {
         transform: translate(${position[18]._x}px, ${position[18]._y}px);
@@ -265,6 +286,7 @@ processInfoFaceApi().then(() => {
   } else {
     console.error('Position array is empty');
   } 
+}
 
   return (
     <div className=" bg-[#ed1699]  ">
