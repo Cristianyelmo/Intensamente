@@ -3,6 +3,7 @@ import * as faceapi from 'face-api.js';
 import './App.css';
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import * as THREE from "three";
+import html2canvas from 'html2canvas';
 
 function App() {
   const imageRef = useRef<HTMLImageElement>(null);
@@ -18,7 +19,7 @@ const [booleanThrejs,setBoleanThrejs]=useState(false)
 
 
 
-
+const canvasRef4 = useRef<HTMLDivElement>(null);
 
 
 
@@ -77,8 +78,7 @@ const testapi = async (imageSrc: string ) => {
             console.error('No hay descripciones de rostro disponibles');
           }
   
-           faceapi.draw.drawFaceLandmarks(canvasRef.current, fullFaceDescriptions);
-          faceapi.draw.drawFaceExpressions(canvasRef.current, fullFaceDescriptions, 0.05); 
+        
         }
       }
     } catch (error) {
@@ -91,81 +91,7 @@ const testapi = async (imageSrc: string ) => {
   console.log('hola prueba a ver que tal')
   try {
     const result = await processInfoFaceApi(imageSrc);
-  if(booleanThrejs == false ){
-    try {
-      const scene = new THREE.Scene();
-      const camera = new THREE.PerspectiveCamera(
-        75,
-        window.innerWidth / window.innerHeight,
-        0.1,
-        800
-      );
-      const renderer = new THREE.WebGLRenderer({ alpha: true });
-    
-      const container = canvasRef3.current;
-      const width = 300
-      const height = 300
-      renderer.setSize(width, height);
-    if(container){
-      container.appendChild(renderer.domElement);
-    }
-    camera.position.set(0, 100, 300); 
-    camera.lookAt(0, 0, 0);
-    
-      const loader = new GLTFLoader();
-      loader.load(
-        "/3D/untitledxd2.glb",
-        function (gltf:any) {
-          const model = gltf.scene;
-          model.scale.set(10, 10, 10);
-          model.position.set(0, 0, 0);
-          modelRef.current = model;
-       console.log(model)
   
-         
-     
-      
-         
-    
-         
-       scene.add(model);
-         
-         
-          const ambientLight = new THREE.AmbientLight(0xffffff, 2);
-          scene.add(ambientLight);
-         
-    
-          
-        },
-        undefined,
-        function (error:any) {
-          console.error(error);
-        }
-      );
-    
-      function animate() {
-        renderer.render(scene, camera);
-      }
-    
-      renderer.setAnimationLoop(animate);
-    
-      return () => {
-        renderer.setAnimationLoop(null);
-        if(container){
-        container.removeChild(renderer.domElement);
-      }
-        renderer.dispose();
-      };
-    } catch (error) {
-      
-    }finally{
-      setBoleanThrejs(true)
-    }
- 
-
-
-  }else{
-    if(modelRef.current){
      
      
 
@@ -176,78 +102,128 @@ const testapi = async (imageSrc: string ) => {
         const textureExpresion = result.expresion;
         
       
-        const tex = new THREE.TextureLoader().load(
-          `/texture/${textureExpresion}.png`
-        );
-
-        modelRef.current?.traverse((node: any) => {
-          if (node.isMesh && node.name === 'Cube') {
-           
-            node.material.map = tex;
-          }
-        });
+        
         const landmarks = result.positionsx;
 
        console.log(landmarks[0].x)
       
       
-       if (landmarks) {
-        const point0 = landmarks[0];   
-        const point16 = landmarks[16];
-        const point18 = landmarks[18]; 
-        
-       
-        const faceWidth = Math.sqrt(Math.pow(point16.x - point0.x, 2) + Math.pow(point16.y - point0.y, 2));
-        
-       
-        const originalImageSize = 60;
-        const minImageSize = 30; 
-        
-        const scaleFactor = Math.max(minImageSize / originalImageSize, faceWidth / originalImageSize);
-        const newSize = Math.min(originalImageSize * scaleFactor, originalImageSize);
-        
+     
       
-        const deltaX = point16.x - point0.x;
-        const deltaY = point16.y - point0.y;
-        const angle = Math.atan2(deltaY, deltaX) * (180 / Math.PI);
-
-
-const image = document.querySelector('#imagexd')  as HTMLElement;;
-
-
-
-        
       
-        if(image){
-          image.style.width = `${newSize}px`;
-          image.style.height = `${newSize}px`;
+      const landMarksProcess = ()=>{
+        if (landmarks) {
+          const point0 = landmarks[0];   
+          const point16 = landmarks[16];
+          const point18 = landmarks[18]; 
+          
+         
+          const faceWidth = Math.sqrt(Math.pow(point16.x - point0.x, 2) + Math.pow(point16.y - point0.y, 2));
+          
+         
+          const originalImageSize = 60;
+          const minImageSize = 30; 
+          
+          const scaleFactor = Math.max(minImageSize / originalImageSize, faceWidth / originalImageSize);
+          const newSize = Math.min(originalImageSize * scaleFactor, originalImageSize);
           
         
-         /*  const imageWidth = newSize; */
-          const imageHeight = newSize;
-          const offsetX = 0; 
-          const offsetY = -imageHeight ; 
+          const deltaX = point16.x - point0.x;
+          const deltaY = point16.y - point0.y;
+          const angle = Math.atan2(deltaY, deltaX) * (180 / Math.PI);
+  
+  
+        const image2 = document.querySelector('#test')
+  
+        if(image2){
+          image2.remove()
+  
+          const image = document.createElement('img')  as HTMLImageElement | null;
+   if(image){
+            image.style.width = `${newSize}px`;
+            image.style.height = `${newSize}px`;
+           
+            image.src = `/texture/${textureExpresion}.png`;
+           /*  const imageWidth = newSize; */
+            const imageHeight = newSize;
+            const offsetX = 0; 
+            const offsetY = -imageHeight ; 
+            
+          image.id = 'test'
+            image.style.position = 'absolute'; 
+            image.style.zIndex = '50';
+            image.style.transform = `translate(${point18.x + offsetX}px, ${point18.y + offsetY}px) rotate(${angle}deg)`;
+   image.style.boxShadow = '10px 10px 20px rgba(0, 0, 0, 0.5)'
+            if (canvasRef4.current) {
+              canvasRef4.current.appendChild(image); // Añade la nueva imagen al contenedor
+          }
+        }
+        }else{
+          const image = document.createElement('img')  as HTMLImageElement | null;
+          if(image){
+                   image.style.width = `${newSize}px`;
+                   image.style.height = `${newSize}px`;
+                  
+                   image.src = `/texture/${textureExpresion}.png`;
+                  /*  const imageWidth = newSize; */
+                   const imageHeight = newSize;
+                   const offsetX = 0; 
+                   const offsetY = -imageHeight ; 
+                   
+                 image.id = 'test'
+                   image.style.position = 'absolute'; 
+                   image.style.zIndex = '50';
+                   image.style.boxShadow = '10px 10px 20px rgba(0, 0, 0, 0.5)'
+                   image.style.transform = `translate(${point18.x + offsetX}px, ${point18.y + offsetY}px) rotate(${angle}deg)`;
+         
+                   if (canvasRef4.current) {
+                     canvasRef4.current.appendChild(image); // Añade la nueva imagen al contenedor
+                 }
+               }
+        }
+  
           
-        
-          image.style.position = 'absolute'; 
-          image.style.transform = `translate(${point18.x + offsetX}px, ${point18.y + offsetY}px) rotate(${angle}deg)`;
+  
+  
+        }
       }
-      }
+
       
+      await landMarksProcess()
 
 
+        
+
+        if (plantillaRef.current) {
+          
+          html2canvas(plantillaRef.current).then((capturedCanvas) => {
+            const capturedImage = capturedCanvas.toDataURL('image/png');
+            console.log(capturedImage)
+
+            const link = document.createElement('a');
+        link.href = capturedImage;
+        link.download = 'captured-image.png';
+       
+        document.body.appendChild(link);
+          })
+        }  
+
+
+      
 
       } else {
       
         console.error('Datos de textura no válidos:', result);
         setTextureExpresion({ expresion: 'default', positionsx: [] });
       }
-  }
-  }
+  
+  }catch (error) {
+  console.log(console.error)
+}
 
-} catch (error) {
-    console.error('Error en fetchData:', error);
-  }
+
+
+
 
 
 
@@ -335,25 +311,13 @@ const image = document.querySelector('#imagexd')  as HTMLElement;;
 
 
 
-  
-console.log(textureExpresion)
-   let keyframes;
-   if(textureExpresion && textureExpresion.positionsx){
-  if (textureExpresion.positionsx.length > 0) {
-   
-    keyframes = `
-      .translate-example {
-        transform: translate(${position[8]._x}px, ${position[8]._y}px);
-      }
-    `;
-  } else {
-    console.error('Position array is empty');
-  } 
-}
+  const plantillaRef = useRef<HTMLDivElement | null>(null);
+  const canvasPlantillaRef =  useRef<HTMLCanvasElement | null>(null);
+
 
   return (
     <div className=" bg-[#ed1699]  ">
-<style>{keyframes}</style>
+
 <div className='relative w-[300px] h-[300px]'>
 <video ref={videoRef} width="300" height="300" className='absolute z-20'></video>
 <canvas 
@@ -365,11 +329,11 @@ console.log(textureExpresion)
 </div>
 
 
+<div className='relative'>
+<div className='bg-black w-[400px] h-[400px] z-10 flex justify-center items-center flex-col ' ref={plantillaRef}>
+ <div className="relative bg-[#ed1699] w-[300px] h-[300px]  overflow-hidden" ref={canvasRef4}>
 
 
- <div className="relative bg-[#ed1699] w-[300px] h-[300px] ">
-      <div className='bg-black w-[10px] h-[10px] absolute z-50 translate-example'></div> 
-<img src="/texture/xdxd.png" alt="" className='z-50 absolute' id='imagexd' width={60} height={60}/>
       <div 
     
         ref={canvasRef3} 
@@ -393,6 +357,19 @@ console.log(textureExpresion)
       /> 
     
     </div> 
+    <p className='text-white text-xl mt-2'>Intensamente</p>
+    </div>
+   
+
+    
+
+    </div>
+
+
+
+
+
+
 
     <button onClick={CapturePhoto}  className="absolute  z-40 ">hola</button>
   
