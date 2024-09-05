@@ -212,7 +212,7 @@ const testapi = async (imageSrc: string ) => {
         const angle = Math.atan2(deltaY, deltaX) * (180 / Math.PI);
 
 
-const image = document.querySelector('#imagexd');
+const image = document.querySelector('#imagexd')  as HTMLElement;;
 
 
 
@@ -223,7 +223,7 @@ const image = document.querySelector('#imagexd');
           image.style.height = `${newSize}px`;
           
         
-          const imageWidth = newSize;
+         /*  const imageWidth = newSize; */
           const imageHeight = newSize;
           const offsetX = -6; 
           const offsetY = -imageHeight ; 
