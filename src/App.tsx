@@ -77,8 +77,8 @@ const testapi = async (imageSrc: string ) => {
             console.error('No hay descripciones de rostro disponibles');
           }
   
-          /* faceapi.draw.drawFaceLandmarks(canvasRef.current, fullFaceDescriptions);
-          faceapi.draw.drawFaceExpressions(canvasRef.current, fullFaceDescriptions, 0.05); */
+           faceapi.draw.drawFaceLandmarks(canvasRef.current, fullFaceDescriptions);
+          faceapi.draw.drawFaceExpressions(canvasRef.current, fullFaceDescriptions, 0.05); 
         }
       }
     } catch (error) {
@@ -90,7 +90,7 @@ const testapi = async (imageSrc: string ) => {
 
   console.log('hola prueba a ver que tal')
   try {
-   
+    const result = await processInfoFaceApi(imageSrc);
   if(booleanThrejs == false ){
     try {
       const scene = new THREE.Scene();
@@ -109,13 +109,12 @@ const testapi = async (imageSrc: string ) => {
     if(container){
       container.appendChild(renderer.domElement);
     }
-      camera.position.set(0, 20,100);
-         
-      camera.lookAt(0, 0, 0);
+    camera.position.set(0, 100, 300); 
+    camera.lookAt(0, 0, 0);
     
       const loader = new GLTFLoader();
       loader.load(
-        "/3D/capS.glb",
+        "/3D/untitledxd2.glb",
         function (gltf:any) {
           const model = gltf.scene;
           model.scale.set(10, 10, 10);
@@ -166,9 +165,9 @@ const testapi = async (imageSrc: string ) => {
 
 
   }else{
-    if( modelRef.current){
+    if(modelRef.current){
      
-      const result = await processInfoFaceApi(imageSrc);
+     
 
   
       if (result && typeof result === 'object') {
@@ -187,6 +186,57 @@ const testapi = async (imageSrc: string ) => {
             node.material.map = tex;
           }
         });
+        const landmarks = result.positionsx;
+
+       console.log(landmarks[0].x)
+      
+      
+       if (landmarks) {
+        const point0 = landmarks[0];   
+        const point16 = landmarks[16];
+        const point18 = landmarks[18]; 
+        
+       
+        const faceWidth = Math.sqrt(Math.pow(point16.x - point0.x, 2) + Math.pow(point16.y - point0.y, 2));
+        
+       
+        const originalImageSize = 60;
+        const minImageSize = 30; 
+        
+        const scaleFactor = Math.max(minImageSize / originalImageSize, faceWidth / originalImageSize);
+        const newSize = Math.min(originalImageSize * scaleFactor, originalImageSize);
+        
+      
+        const deltaX = point16.x - point0.x;
+        const deltaY = point16.y - point0.y;
+        const angle = Math.atan2(deltaY, deltaX) * (180 / Math.PI);
+
+
+const image = document.querySelector('#imagexd');
+
+
+
+        
+      
+        if(image){
+          image.style.width = `${newSize}px`;
+          image.style.height = `${newSize}px`;
+          
+        
+          const imageWidth = newSize;
+          const imageHeight = newSize;
+          const offsetX = -6; 
+          const offsetY = -imageHeight ; 
+          
+        
+          image.style.position = 'absolute'; 
+          image.style.transform = `translate(${point18.x + offsetX}px, ${point18.y + offsetY}px) rotate(${angle}deg)`;
+      }
+      }
+      
+
+
+
       } else {
       
         console.error('Datos de textura no válidos:', result);
@@ -290,9 +340,10 @@ console.log(textureExpresion)
    let keyframes;
    if(textureExpresion && textureExpresion.positionsx){
   if (textureExpresion.positionsx.length > 0) {
+   
     keyframes = `
       .translate-example {
-        transform: translate(${position[18]._x}px, ${position[18]._y}px);
+        transform: translate(${position[8]._x}px, ${position[8]._y}px);
       }
     `;
   } else {
@@ -318,7 +369,7 @@ console.log(textureExpresion)
 
  <div className="relative bg-[#ed1699] w-[300px] h-[300px] ">
       <div className='bg-black w-[10px] h-[10px] absolute z-50 translate-example'></div> 
-
+<img src="/texture/xdxd.png" alt="" className='z-50 absolute' id='imagexd' width={60} height={60}/>
       <div 
     
         ref={canvasRef3} 
