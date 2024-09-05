@@ -225,7 +225,7 @@ const image = document.querySelector('#imagexd')  as HTMLElement;;
         
          /*  const imageWidth = newSize; */
           const imageHeight = newSize;
-          const offsetX = -6; 
+          const offsetX = 0; 
           const offsetY = -imageHeight ; 
           
         
