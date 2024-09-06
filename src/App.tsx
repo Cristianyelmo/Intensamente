@@ -35,8 +35,6 @@ function App() {
             console.log(fullFaceDescriptions);
 
             if (fullFaceDescriptions.length > 0) {
-              
-
               const newArray = fullFaceDescriptions.map(
                 ({ expressions, landmarks }) => {
                   let highestExpression = "";
@@ -76,10 +74,10 @@ function App() {
 
       console.log(result);
       const landMarksProcess = () => {
-        let textureExpresionx;
+      
         if (Array.isArray(result)) {
           result.map(async (result, index) => {
-            textureExpresionx = result.expression;
+            let textureExpresionx = result.expression;
 
             const landmarks = result.landmarks;
 
@@ -168,13 +166,15 @@ function App() {
             }
           });
 
+          const textureExpresionx = result.map(item => item.expression);
+
           return textureExpresionx;
         }
       };
 
       const resultlandmarks = await landMarksProcess();
       console.log(resultlandmarks);
-      const screenShotImage = () => {
+       const screenShotImage = () => {
         if (plantillaRef.current) {
           html2canvas(plantillaRef.current).then((capturedCanvas) => {
             const capturedImage = capturedCanvas.toDataURL("image/png");
@@ -187,16 +187,40 @@ function App() {
               console.error("Element not found");
             }
             const color = document.getElementById(`color-${shootx}`);
+            if(color){
+            color.classList.add('grid', `grid-cols-${resultlandmarks?.length}`);
+          }
+
+
+          
+          resultlandmarks?.map((item)=>{
             let changecolor = "#000000";
-            if (resultlandmarks == "happy") {
+            if (item == "happy") {
               changecolor = "#f8df6d";
-            } else if (resultlandmarks == "angry") {
+            } else if (item == "angry") {
               changecolor = "#ed2225";
+            }else if (item == "sad") {
+              changecolor = "#144b9a";
             }
 
-            if (color) {
-              color.style.backgroundColor = changecolor;
-            }
+            const newDiv = document.createElement('div');
+
+  
+  newDiv.style.backgroundColor = changecolor;  
+  newDiv.style.width = '100%'; 
+  newDiv.style.height = '100%'; 
+  
+
+  
+  if(color){
+  color.appendChild(newDiv);
+}
+
+          })
+
+            
+
+            
           });
         }
       };
@@ -221,7 +245,7 @@ function App() {
             });
           }
         }, 3000);
-      }
+      } 
     } catch (error) {
       console.log(console.error);
     }
@@ -250,7 +274,7 @@ function App() {
       });
   }, []);
 
-/*   useEffect(() => {
+  /*   useEffect(() => {
     const cargarCamera = async () => {
       try {
         const constraints = { video: true };
@@ -268,8 +292,6 @@ function App() {
   }, []); */
 
   const CapturePhoto = async () => {
-
-   
     const Capturenew = async (shootx: number) => {
       if (canvasRef2.current && imageRef.current) {
         canvasRef2.current.width = 300;
@@ -298,26 +320,23 @@ function App() {
     };
     const shootPhotos = (currentShoot: number) => {
       console.log("foto " + currentShoot);
-      
+
       if (currentShoot < 3) {
         setTimeout(async () => {
           await Capturenew(currentShoot + 1);
           setShoot(currentShoot + 1);
-          shootPhotos(currentShoot + 1); 
-        }, 3000); 
+          shootPhotos(currentShoot + 1);
+        }, 3000);
       } else {
-        console.log("lito"); 
+        console.log("lito");
         setShoot(0);
       }
     };
 
     shootPhotos(shoot);
-
-    
   };
 
   const plantillaRef = useRef<HTMLDivElement | null>(null);
-  
 
   return (
     <div className=" bg-[#ed1699]  ">
@@ -329,12 +348,17 @@ function App() {
           className="absolute z-20"
         ></video> */}
 
-        <img src="/New Projectxd.png" alt=""  width="300"
+        <img
+          src="/New Project(5).png"
+          alt=""
+          width="300"
           height="300"
-          className="absolute z-20" ref={videoRef}/>
+          className="absolute z-30"
+          ref={videoRef}
+        />
         <canvas
           ref={canvasRef2}
-          className="absolute z-10 w-[300px] h-[300px] hidden"
+          className="absolute z-20 w-[300px] h-[300px] hidden"
         ></canvas>
       </div>
 
@@ -366,29 +390,57 @@ function App() {
       <button onClick={CapturePhoto} className="absolute  z-40 ">
         hola
       </button>
-      <div id="image-container" ref={finalImageRef}>
+      <div id="image-container" className="space-y-2 bg-black" ref={finalImageRef}>
+      
         <div
           className="bg-black w-[400px] h-[400px] flex justify-center items-center"
-          id="color-1"
+         
         >
-          <img src="" alt="" id="1" />
+
+
+          <img src="" alt="" id="1"  width="300"
+          height="300"
+          className="absolute z-30"/>
+<div className="w-[400px] h-[400px] "  id="color-1">
+  {/* <div className="bg-[#f8df6d] w-full h-full"></div>
+  <div className="bg-[#ed2225] w-full h-full"></div> */}
+</div>
         </div>
 
         <div
           className="bg-black w-[400px] h-[400px] flex justify-center items-center"
-          id="color-2"
+         
         >
-          <img src="" alt="" id="2" />
+          <img src="" alt="" id="2"  width="300"
+          height="300"
+          className="absolute z-30" />
+
+<div className="w-[400px] h-[400px] "  id="color-2">
+  {/* <div className="bg-[#f8df6d] w-full h-full"></div>
+  <div className="bg-[#ed2225] w-full h-full"></div> */}
+</div>
+
+
         </div>
 
         <div
           className="bg-black w-[400px] h-[400px] flex justify-center items-center"
-          id="color-3"
+         
         >
-          <div>
-            <img src="" alt="" id="3" />
-          </div>
+          <img src="" alt="" id="3"  width="300"
+          height="300"
+          className="absolute z-30" />
+
+<div className="w-[400px] h-[400px] "  id="color-3">
+  {/* <div className="bg-[#f8df6d] w-full h-full"></div>
+  <div className="bg-[#ed2225] w-full h-full"></div> */}
+</div>
+
+
         </div>
+      
+
+
       </div>
     </div>
   );
