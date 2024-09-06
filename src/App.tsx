@@ -18,16 +18,16 @@ function App() {
     { expresion: string; positionsx: any[] }[] | null
   >(null);
   const [booleanThrejs, setBoleanThrejs] = useState(false);
-
+  const [shoot,setShoot]= useState<number>(0)
   const canvasRef4 = useRef<HTMLDivElement>(null);
+const [enteraccess,setEnterAcess] = useState(false)
+const finalImageRef = useRef<HTMLDivElement>()
+  const testapi = async (imageSrc: string,shootx:number) => {
 
-  const testapi = async (imageSrc: string) => {
-    const processInfoFaceApi = async (imageSrc: string) => {
+     const processInfoFaceApi = async (imageSrc: string) => {
       try {
-        if (canvasRef.current && imageRef.current) {
-          const number = 300;
-          canvasRef.current.width = number;
-          canvasRef.current.height = number;
+        if (imageRef.current) {
+        
 
           if (imageRef.current) {
             console.log(imageRef.current);
@@ -79,6 +79,7 @@ function App() {
     };
 
     console.log("hola prueba a ver que tal");
+  
     try {
       const result = await processInfoFaceApi(imageSrc);
 
@@ -151,7 +152,7 @@ if(imageReview){
                 }px) rotate(${angle}deg)`;
                 image.style.boxShadow = "10px 10px 20px rgba(0, 0, 0, 0.5)";
                 if (canvasRef4.current) {
-                  canvasRef4.current.appendChild(image); // Añade la nueva imagen al contenedor
+                  canvasRef4.current.appendChild(image); 
                 }
               }
             }else{
@@ -223,13 +224,65 @@ if(imageReview){
 
         await landMarksProcess();
 
+        const screenShotImage = ()=>{
         if (plantillaRef.current) {
+        
           html2canvas(plantillaRef.current).then((capturedCanvas) => {
             const capturedImage = capturedCanvas.toDataURL("image/png");
             console.log(capturedImage);
+            console.log(shootx,'aca esta el shoot')
+            const image = document.getElementById(`${shootx}`)
+            if(image){
+              image.src=capturedImage
+             
+            }else {
+              console.error("Element not found");
+            }
+
+      
 
           });
         }
+
+      }
+
+      await screenShotImage()
+
+if(shootx == 3){
+  setTimeout(()=>{
+  if(finalImageRef.current){
+   
+
+   
+
+    html2canvas(finalImageRef.current).then((capturedCanvas) => {
+      const capturedImage = capturedCanvas.toDataURL("image/png");
+      const link = document.createElement('a');
+  
+  // Asignar el dataURL como href
+  link.href = capturedImage;
+  
+  // Establecer el nombre del archivo a descargar
+  link.download = 'descarga.png';
+  
+  // Simular un clic en el enlace
+  link.click();
+
+
+    });
+
+  }
+},3000)
+}
+
+
+
+
+       
+
+
+
+
 
       })
 
@@ -241,13 +294,14 @@ if(imageReview){
 
 
 
-      } else {
+      }else{
         console.error("Datos de textura no válidos:", result);
-        setTextureExpresion({ expresion: "default", positionsx: [] });
+       
       }
     } catch (error) {
       console.log(console.error);
-    }
+    }  
+
   };
 
   useEffect(() => {
@@ -266,7 +320,7 @@ if(imageReview){
 
     loadModels()
       .then(() => {
-        testapi("no");
+        testapi("no",0);
       })
       .catch((error) => {
         console.error("Error en fetchData:", error);
@@ -290,10 +344,14 @@ if(imageReview){
     cargarCamera();
   }, []);
 
-  const [shoot,setShoot]= useState<number>(0)
+
+
   const CapturePhoto = async () => {
-   
-   /*  if (canvasRef2.current && imageRef.current) {
+ 
+    const Capturenew = async(shootx:number)=>{
+    
+      if (canvasRef2.current && imageRef.current) {
+     
       canvasRef2.current.width = 300;
       canvasRef2.current.height = 300;
     }
@@ -314,14 +372,17 @@ if(imageReview){
     if (canvasRef2.current) {
       const dataURL = canvasRef2.current.toDataURL("image/png");
       console.log("Data URL:", dataURL);
+      console.log(shootx, 'valor de shootx antes de testapi');
+      await testapi(dataURL,shootx);
+    }  
 
-      await testapi(dataURL);
-    } */
+    }
       const shootPhotos = (currentShoot:number) => {
         console.log('foto ' + currentShoot);
     
         if (currentShoot < 3) {
-          setTimeout(() => {
+          setTimeout(async() => {
+            await Capturenew(currentShoot + 1)
             setShoot(currentShoot + 1);
             shootPhotos(currentShoot + 1); // Llama a la función de nuevo con el valor actualizado
           }, 3000); // Espera 3 segundos antes de la próxima foto
@@ -353,7 +414,7 @@ if(imageReview){
 
       <div className="relative">
         <div
-          className="bg-black w-[400px] h-[400px] z-10 flex justify-center items-center flex-col "
+          className=" w-[300px] h-[300px] bg-black z-10 flex justify-center items-center flex-col "
           ref={plantillaRef}
         >
           <div
@@ -365,10 +426,7 @@ if(imageReview){
               className="absolute top-0 z-30 w-[300px] h-[300px]"
             ></div>
 
-            <canvas
-              ref={canvasRef}
-              className="absolute top-0 z-20 w-[300px] h-[300px]"
-            ></canvas>
+          
 
             <img
               src="/New Project(3).jpg"
@@ -378,13 +436,29 @@ if(imageReview){
               className="absolute  z-10 w-full h-full"
             />
           </div>
-          <p className="text-white text-xl mt-2">Intensamente</p>
+         
         </div>
       </div>
 
       <button onClick={CapturePhoto} className="absolute  z-40 ">
         hola
       </button>
+      <div id="image-container" ref={finalImageRef}>
+<div className="bg-black w-[400px] h-[400px] flex justify-center items-center">
+<img src="" alt=""  id="1"/>
+</div>
+
+<div className="bg-black w-[400px] h-[400px] flex justify-center items-center">
+<img src="" alt=""  id="2"/>
+</div>
+
+
+<div className="bg-black w-[400px] h-[400px] flex justify-center items-center">
+  <div>
+<img src="" alt=""  id="3"/>
+</div>
+</div>
+      </div>
     </div>
   );
 }
