@@ -40,3 +40,119 @@
 .read-the-docs {
   color: #888;
 }
+
+
+@keyframes changeText0 {
+  0% {
+    content: "3";
+  }
+  33% {
+    content: "2";
+  }
+  66% {
+    content: "1";
+  }
+  100% {
+    content: "0";
+  }
+}
+
+
+@keyframes changeText1 {
+  0% {
+    content: "3";
+  }
+  33% {
+    content: "2";
+  }
+  66% {
+    content: "1";
+  }
+  100% {
+    content: "0";
+  }
+}
+
+@keyframes changeText2 {
+  0% {
+    content: "3";
+  }
+  33% {
+    content: "2";
+  }
+  66% {
+    content: "1";
+  }
+  100% {
+    content: "0";
+  }
+}
+
+
+.box0::after {
+  content: "3";
+  display: block;
+  font-size: 48px;
+  text-align: center;
+  animation: changeText0 3s steps(3) forwards;
+}
+
+.box0 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  width: 200px;
+  border: 1px solid black;
+}
+
+
+
+
+
+/* Aplicar la animación al pseudo-elemento */
+.box1::after {
+  content: "3";
+  display: block;
+  font-size: 48px;
+  text-align: center;
+  animation: changeText1 3s steps(3) forwards;
+}
+
+.box1 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  width: 200px;
+  border: 1px solid black;
+}
+
+
+
+
+/* Aplicar la animación al pseudo-elemento */
+.box2::after {
+  content: "3";
+  display: block;
+  font-size: 48px;
+  text-align: center;
+  animation: changeText2 3s steps(3) forwards;
+}
+
+.box2 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  width: 200px;
+  border: 1px solid black;
+}
+
+
+
+.absolute2 {
+  position: absolute;
+  left: -9999px;
+  top: -9999px;
+}

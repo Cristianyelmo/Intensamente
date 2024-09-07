@@ -10,13 +10,15 @@ function App() {
   const canvasRef2 = useRef<HTMLCanvasElement>(null);
   const canvasRef3 = useRef<HTMLDivElement>(null);
 
-  const videoRef = useRef<HTMLImageElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   const [shoot, setShoot] = useState<number>(0);
   const canvasRef4 = useRef<HTMLDivElement>(null);
 
-  const finalImageRef = useRef<HTMLDivElement>();
+  const finalImageRef = useRef<HTMLDivElement | null>(null);
+  const [KeyframesCount, setKeyframesCount] = useState<string>("");
   const testapi = async (imageSrc: string, shootx: number) => {
+   
     const processInfoFaceApi = async (imageSrc: string) => {
       try {
         if (imageRef.current) {
@@ -180,33 +182,30 @@ function App() {
             const capturedImage = capturedCanvas.toDataURL("image/png");
             console.log(capturedImage);
             console.log(shootx, "aca esta el shoot");
-            const image = document.getElementById(`${shootx}`);
+            const image = document.getElementById(`${shootx}`)  as HTMLImageElement;;
             if (image) {
               image.src = capturedImage;
             } else {
               console.error("Element not found");
             }
             const color = document.getElementById(`color-${shootx}`);
+            console.log(resultlandmarks?.length)
+            console.log(color)
             if(color){
-            color.classList.add('grid', `grid-cols-${resultlandmarks?.length}`);
+              const resultlandmarksLength = resultlandmarks?.length || 1; 
+              color.style.display = 'grid'; 
+              color.style.gridTemplateColumns = `repeat(${resultlandmarksLength}, 1fr)`;
           }
 
 
           
           resultlandmarks?.map((item)=>{
-            let changecolor = "#000000";
-            if (item == "happy") {
-              changecolor = "#f8df6d";
-            } else if (item == "angry") {
-              changecolor = "#ed2225";
-            }else if (item == "sad") {
-              changecolor = "#144b9a";
-            }
+           
 
             const newDiv = document.createElement('div');
 
-  
-  newDiv.style.backgroundColor = changecolor;  
+            newDiv.style.backgroundImage = `url('/texture/${item}.png')`;
+            newDiv.style.backgroundRepeat = 'repeat';
   newDiv.style.width = '100%'; 
   newDiv.style.height = '100%'; 
   
@@ -221,8 +220,14 @@ function App() {
             
 
             
+          }).then(()=>{
+            if (canvasRef4.current) {
+              canvasRef4.current.innerHTML = ''; 
+            }
           });
         }
+
+       
       };
 
       await screenShotImage();
@@ -245,6 +250,24 @@ function App() {
             });
           }
         }, 3000);
+
+         setTimeout(() => {
+          console.log('holaaa aqui entro')
+           const color = document.getElementById('color-1');
+          const color2 = document.getElementById('color-2');
+          const color3 = document.getElementById('color-3');
+    if (color) {
+      color.innerHTML = ''; 
+    }
+    
+    if (color2) {
+      color2.innerHTML = ''; 
+    }
+    
+    if (color3) {
+      color3.innerHTML = ''; 
+    } 
+        }, 4000); 
       } 
     } catch (error) {
       console.log(console.error);
@@ -274,7 +297,7 @@ function App() {
       });
   }, []);
 
-  /*   useEffect(() => {
+   useEffect(() => {
     const cargarCamera = async () => {
       try {
         const constraints = { video: true };
@@ -288,11 +311,15 @@ function App() {
       }
     };
 
-    cargarCamera();
-  }, []); */
+    cargarCamera(); 
+  }, []); 
 
   const CapturePhoto = async () => {
+   
     const Capturenew = async (shootx: number) => {
+
+     
+
       if (canvasRef2.current && imageRef.current) {
         canvasRef2.current.width = 300;
         canvasRef2.current.height = 300;
@@ -320,10 +347,11 @@ function App() {
     };
     const shootPhotos = (currentShoot: number) => {
       console.log("foto " + currentShoot);
-
+      setKeyframesCount(`box${currentShoot}`)
       if (currentShoot < 3) {
         setTimeout(async () => {
           await Capturenew(currentShoot + 1);
+         
           setShoot(currentShoot + 1);
           shootPhotos(currentShoot + 1);
         }, 3000);
@@ -337,40 +365,52 @@ function App() {
   };
 
   const plantillaRef = useRef<HTMLDivElement | null>(null);
-
+console.log(KeyframesCount)
   return (
-    <div className=" bg-[#ed1699]  ">
+    <div className=" bg-[#ed1699]">
       <div className="relative w-[300px] h-[300px]">
-        {/* <video
+         <video
           ref={videoRef}
           width="300"
           height="300"
           className="absolute z-20"
-        ></video> */}
+        ></video> 
 
-        <img
+         {/* <img
           src="/New Project(5).png"
           alt=""
           width="300"
           height="300"
           className="absolute z-30"
           ref={videoRef}
-        />
+        />  */}
         <canvas
           ref={canvasRef2}
           className="absolute z-20 w-[300px] h-[300px] hidden"
         ></canvas>
       </div>
+      <div className={`bg-black w-[50px] h-[50px] ${KeyframesCount}`}>
 
-      <div className="relative">
+</div>
+      <div className="relative ">
         <div
-          className=" w-[300px] h-[300px] bg-black z-10 flex justify-center items-center flex-col "
+          className=" w-[300px] h-[300px] bg-black z-10 flex justify-center items-center flex-col absolute2"
           ref={plantillaRef}
         >
+          
           <div
             className="relative bg-[#ed1699] w-[300px] h-[300px]  overflow-hidden"
-            ref={canvasRef4}
+            
           >
+<div className=" w-[300px] h-[300px] absolute z-50" >
+          <div className="w-[300px] h-[300px] relative" ref={canvasRef4}>
+
+          </div>
+          </div>
+
+
+
+
             <div
               ref={canvasRef3}
               className="absolute top-0 z-30 w-[300px] h-[300px]"
@@ -390,7 +430,9 @@ function App() {
       <button onClick={CapturePhoto} className="absolute  z-40 ">
         hola
       </button>
-      <div id="image-container" className="space-y-2 bg-black" ref={finalImageRef}>
+
+     
+      <div id="image-container" className="space-y-2 bg-black absolute2" ref={finalImageRef}>
       
         <div
           className="bg-black w-[400px] h-[400px] flex justify-center items-center"
@@ -401,7 +443,7 @@ function App() {
           <img src="" alt="" id="1"  width="300"
           height="300"
           className="absolute z-30"/>
-<div className="w-[400px] h-[400px] "  id="color-1">
+<div className="w-[400px] h-[400px]"  id="color-1">
   {/* <div className="bg-[#f8df6d] w-full h-full"></div>
   <div className="bg-[#ed2225] w-full h-full"></div> */}
 </div>
@@ -415,9 +457,8 @@ function App() {
           height="300"
           className="absolute z-30" />
 
-<div className="w-[400px] h-[400px] "  id="color-2">
-  {/* <div className="bg-[#f8df6d] w-full h-full"></div>
-  <div className="bg-[#ed2225] w-full h-full"></div> */}
+<div className="w-[400px] h-[400px]"  id="color-2">
+   
 </div>
 
 
@@ -431,7 +472,7 @@ function App() {
           height="300"
           className="absolute z-30" />
 
-<div className="w-[400px] h-[400px] "  id="color-3">
+<div className="w-[400px] h-[400px]"  id="color-3">
   {/* <div className="bg-[#f8df6d] w-full h-full"></div>
   <div className="bg-[#ed2225] w-full h-full"></div> */}
 </div>
