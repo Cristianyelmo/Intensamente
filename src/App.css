@@ -156,3 +156,23 @@
   left: -9999px;
   top: -9999px;
 }
+
+
+
+
+@keyframes loading {
+  0% {
+    opacity: 0;
+  }
+ 
+  100% {
+   opacity: 1;
+  }
+}
+
+
+
+.loadingx {
+  
+  animation: loading 2s infinite;
+}

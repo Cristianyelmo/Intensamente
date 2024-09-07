@@ -14,14 +14,15 @@ function App() {
 
   const [shoot, setShoot] = useState<number>(0);
   const canvasRef4 = useRef<HTMLDivElement>(null);
-
   const finalImageRef = useRef<HTMLDivElement | null>(null);
+  const [loading,setLoading] =useState<boolean>(true)
   const [KeyframesCount, setKeyframesCount] = useState<string>("");
   const testapi = async (imageSrc: string, shootx: number) => {
+    
    
     const processInfoFaceApi = async (imageSrc: string) => {
       try {
-        if (imageRef.current) {
+    
           if (imageRef.current) {
             console.log(imageRef.current);
 
@@ -29,6 +30,7 @@ function App() {
               imageRef.current.src = imageSrc;
               console.log(imageRef.current);
             }
+
 
             const fullFaceDescriptions = await faceapi
               .detectAllFaces(imageRef.current)
@@ -62,10 +64,17 @@ function App() {
             } else {
               console.error("No hay descripciones de rostro disponibles");
             }
-          }
+
+
+
+
+
+          
         }
       } catch (error) {
         console.error("Error durante la detección facial:", error);
+      }finally{
+        setLoading(false)
       }
     };
 
@@ -368,7 +377,9 @@ function App() {
 console.log(KeyframesCount)
   return (
     <div className=" bg-[#ed1699]">
-      <div className="relative w-[300px] h-[300px]">
+     {loading && <div className="loadingx">cargando</div>}
+      <div className="absolute2">
+      <div className="relative w-[300px] h-[300px] ">
          <video
           ref={videoRef}
           width="300"
@@ -388,6 +399,8 @@ console.log(KeyframesCount)
           ref={canvasRef2}
           className="absolute z-20 w-[300px] h-[300px] hidden"
         ></canvas>
+      </div>
+
       </div>
       <div className={`bg-black w-[50px] h-[50px] ${KeyframesCount}`}>
 
