@@ -384,7 +384,7 @@ console.log(KeyframesCount)
           ref={videoRef}
           width="300"
           height="300"
-          className="absolute z-20 w-[300px] h-[300px] object-contain"
+          className="absolute z-20 w-[300px] h-[300px] object-cover"
         ></video> 
 
          {/* <img
