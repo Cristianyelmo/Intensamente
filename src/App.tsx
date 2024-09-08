@@ -378,13 +378,13 @@ console.log(KeyframesCount)
   return (
     <div className=" bg-[#ed1699]">
      {loading && <div className="loadingx">cargando</div>}
-      <div className="absolute2">
-      <div className="relative w-[300px] h-[300px] ">
+      <div className="">
+      <div className="relative w-[300px] h-[300px]">
          <video
           ref={videoRef}
           width="300"
           height="300"
-          className="absolute z-20"
+          className="absolute z-20 w-[300px] h-[300px] object-contain"
         ></video> 
 
          {/* <img
