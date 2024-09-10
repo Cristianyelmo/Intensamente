@@ -2,12 +2,30 @@
 
 
 
+import { useEffect } from "react";
 import { MainHook } from "../context/MainContext";
 
 function Camera2() {
+
+  
 const {loading,videoRef,KeyframesCount,canvasRef2,plantillaRef,canvasRef4,canvasRef3,imageRef,CapturePhoto,finalImageRef} = MainHook() || {}; 
 
+useEffect(() => {
+    const cargarCamera = async () => {
+      try {
+        const constraints = { video: true };
+        const stream = await navigator.mediaDevices.getUserMedia(constraints);
+        if (videoRef.current) {
+          (videoRef.current as HTMLVideoElement).srcObject = stream;
+          (videoRef.current as HTMLVideoElement).play();
+        }
+      } catch (err) {
+        console.error("Error al acceder a la webcam: ", err);
+      }
+    };
 
+    cargarCamera();
+  }, []);
   return (
     <div className=" bg-[#ed1699]">
       {loading && <div className="loadingx">cargando</div>}

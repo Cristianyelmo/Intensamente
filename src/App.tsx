@@ -2,7 +2,7 @@
 import "./App.css";
 import { MainHook } from "./context/MainContext";
 import Loading from "./components/Loading";
-import Camera2 from "./components/Camera2";
+import Menu from "./components/Menu";
 
 
 
@@ -14,7 +14,7 @@ function App() {
     <>
     {
    
-    loading ? <Loading/> : <Camera2/>
+    loading ? <Loading/> : <Menu/>
   }
   </>
 );

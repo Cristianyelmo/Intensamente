@@ -63,7 +63,7 @@
   }
   
   .loadingCreative1 {
-    animation: loading1 7s infinite;
+    animation: loading1 7s infinite ;
   }
 
 
@@ -113,7 +113,7 @@
   }
   
   .loadingCreative2 {
-    animation: loading2 7s infinite;
+    animation: loading2 7s infinite ;
   }
 
   @keyframes loading3 {
@@ -162,7 +162,7 @@
   }
   
   .loadingCreative3 {
-    animation: loading3 7s infinite;
+    animation: loading3 7s infinite ;
   }
 
   @keyframes loading4 {
@@ -211,7 +211,7 @@
   }
   
   .loadingCreative4 {
-    animation: loading4 7s infinite;
+    animation: loading4 7s infinite ;
   }
 
   @keyframes loading5 {
@@ -260,7 +260,7 @@
   }
   
   .loadingCreative5 {
-    animation: loading5 7s infinite;
+    animation: loading5 7s infinite ;
   }
 
   @keyframes loading6 {
@@ -358,5 +358,5 @@
   }
   
   .loadingCreative7 {
-    animation: loading7 7s infinite;
+    animation: loading7 7s infinite ;
   }

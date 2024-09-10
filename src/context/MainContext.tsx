@@ -14,6 +14,8 @@ interface MainContextType {
     imageRef: React.RefObject<HTMLImageElement>;
     CapturePhoto: () => void;
     finalImageRef: React.RefObject<HTMLDivElement>;
+    changePage: string; 
+    setChangePage: (value: string) => void; 
   }
 export const MainContext = createContext<MainContextType | null>(null);;
 export const MainHook = () => {
@@ -323,22 +325,7 @@ console.log('aca esta la imagen')
       });
   }, []);
 
-  useEffect(() => {
-    const cargarCamera = async () => {
-      try {
-        const constraints = { video: true };
-        const stream = await navigator.mediaDevices.getUserMedia(constraints);
-        if (videoRef.current) {
-          (videoRef.current as HTMLVideoElement).srcObject = stream;
-          (videoRef.current as HTMLVideoElement).play();
-        }
-      } catch (err) {
-        console.error("Error al acceder a la webcam: ", err);
-      }
-    };
-
-    cargarCamera();
-  }, []);
+ 
 
   const CapturePhoto = async () => {
     const Capturenew = async (shootx: number) => {
@@ -387,9 +374,16 @@ console.log('aca esta la imagen')
 
     shootPhotos(shoot);
   };
+
+
+  
+  const[changePage,setChangePage]=useState<string>('Home')
+
+
+
   
     return (
-      <MainContext.Provider value={{loading,videoRef,KeyframesCount,canvasRef2,plantillaRef,canvasRef4,canvasRef3,imageRef,CapturePhoto,finalImageRef}}>
+      <MainContext.Provider value={{changePage,setChangePage,loading,videoRef,KeyframesCount,canvasRef2,plantillaRef,canvasRef4,canvasRef3,imageRef,CapturePhoto,finalImageRef}}>
         {children}
       </MainContext.Provider>
     );
