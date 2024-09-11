@@ -19,6 +19,7 @@ function Camera2() {
     imageRef,
     CapturePhoto,
     finalImageRef,
+    disableButton
   } = MainHook() || {};
 
   useEffect(() => {
@@ -44,7 +45,7 @@ function Camera2() {
     useState<boolean>(true);
 
   return (
-    <div className="bg-[#f7ce65] h-screen ">
+    <div className="bg-[#f7ce65] min-h-screen ">
       <button onClick={() => setChangePage("Home")} className="absolute z-50">
         Volver
       </button>
@@ -162,8 +163,8 @@ function Camera2() {
       )}
 
       {instructionsSteptoStep && (
-        <div className="fixed inset-0 w-full h-full flex flex-col items-center justify-center bg-black z-20 bg-opacity-90 overflow-y-auto">
-          <div className="bounce-in-img  p-10   grid md:grid-cols-4 grid-cols-1 gap-10 mt-80 ">
+        <div className="fixed inset-0 w-full  flex flex-col items-center justify-center bg-black z-20 bg-opacity-90 overflow-y-auto">
+          <div className="bounce-in-img  p-10   grid md:grid-cols-4 grid-cols-1 gap-10 mt-80 md:mt-10">
             <div
               className={` flex flex-col items-center text-[#ac7fbd]  md:w-[200px] `}
             >
@@ -237,7 +238,7 @@ function Camera2() {
         </div>
         <button
           onClick={CapturePhoto}
-          className=" bg-black text-white p-4 mt-10"
+          className=" bg-black text-white p-4 mt-10" disabled={disableButton}
         >
           Empieza!
         </button>

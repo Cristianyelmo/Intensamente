@@ -30,6 +30,7 @@ interface MainContextType {
   linkDownloadRef: React.RefObject<HTMLAnchorElement>;
   viewimageFinal: boolean;
   setviewimageFinal: (value: boolean) => void;
+  disableButton:boolean;
 }
 export const MainContext = createContext<MainContextType | null>(null);
 export const MainHook = () => {
@@ -300,6 +301,7 @@ export const MainProvider: React.FC<MyProviderProps> = ({ children }) => {
 
         setTimeout(() => {
           setviewimageFinal(true);
+          setDisableButton(false)
           const color = document.getElementById("color-1");
           const color2 = document.getElementById("color-2");
           const color3 = document.getElementById("color-3");
@@ -345,6 +347,7 @@ export const MainProvider: React.FC<MyProviderProps> = ({ children }) => {
   }, []);
 
   const CapturePhoto = async () => {
+    setDisableButton(true)
     const Capturenew = async (shootx: number) => {
       if (canvasRef2.current && imageRef.current) {
         canvasRef2.current.width = 300;
@@ -395,6 +398,8 @@ export const MainProvider: React.FC<MyProviderProps> = ({ children }) => {
   const [finalShoot, setFinalShoot] = useState<boolean>(false);
   const [viewimageFinal, setviewimageFinal] = useState<boolean>(false);
 
+  const [disableButton, setDisableButton] = useState<boolean>(false);
+
   const [changePage, setChangePage] = useState<string>("Home");
 
   const linkDownloadRef = useRef<HTMLAnchorElement | null>(null);
@@ -421,6 +426,7 @@ export const MainProvider: React.FC<MyProviderProps> = ({ children }) => {
         imageRef,
         CapturePhoto,
         finalImageRef,
+        disableButton
       }}
     >
       {children}
