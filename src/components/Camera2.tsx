@@ -44,7 +44,7 @@ function Camera2() {
     useState<boolean>(true);
 
   return (
-    <div className="bg-[#f7ce65] h-screen overflow-hidden">
+    <div className="bg-[#f7ce65] h-screen ">
       <button onClick={() => setChangePage("Home")} className="absolute z-50">
         Volver
       </button>
