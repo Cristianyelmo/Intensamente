@@ -3,11 +3,14 @@
 
 
 
+
 function Loading() {
   
   return (
 
- <div  className="bg-black  flex flex-col items-center text-white">
+    <div className="bg-black h-screen  text-white flex justify-center items-center">
+ <div  className="bg-black text-center flex flex-col items-center">
+
     <div className="relative w-[200px] h-[200px] overflow-hidden">
     <img src="/Loading.webp" width={400} height={400} className="absolute z-30 w-[200px] h-[200px]"  />
     <div className="bg-[#fc4040] w-[150px] h-[150px] z-20 absolute rounded-full opacity-0 bottom-0 left-[-60px] loadingCreative1"></div>
@@ -22,6 +25,8 @@ function Loading() {
     </div>
 <h1 >Cargando modelos...</h1>
 <p>puede tardar algunos segundos :(</p>
+</div>
+
 </div>
 
   );

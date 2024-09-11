@@ -14,7 +14,7 @@ function App() {
     <>
     {
    
-    loading ? <Loading/> : <Menu/>
+    loading ?  <Loading/>  : <Menu/> 
   }
   </>
 );

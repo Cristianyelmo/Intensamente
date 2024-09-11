@@ -12,10 +12,18 @@ interface MainContextType {
     canvasRef4: React.RefObject<HTMLDivElement>;
     canvasRef3: React.RefObject<HTMLDivElement>;
     imageRef: React.RefObject<HTMLImageElement>;
+    imageRef2: React.RefObject<HTMLImageElement>;
     CapturePhoto: () => void;
     finalImageRef: React.RefObject<HTMLDivElement>;
     changePage: string; 
     setChangePage: (value: string) => void; 
+    shoot:number;
+    finalShoot:boolean;
+    setFinalShoot: (value: boolean) => void; 
+    linkDownloadRef:React.RefObject<HTMLAnchorElement>,
+    viewimageFinal:boolean;
+    setviewimageFinal:(value: boolean) => void; 
+   
   }
 export const MainContext = createContext<MainContextType | null>(null);;
 export const MainHook = () => {
@@ -34,6 +42,8 @@ export const MainHook = () => {
   
   export const MainProvider: React.FC<MyProviderProps> = ({ children }) => {
     const imageRef = useRef<HTMLImageElement>(null);
+
+    const imageRef2 = useRef<HTMLImageElement>(null);
     const [loading, setLoading] = useState<boolean>(true);
   const canvasRef2 = useRef<HTMLCanvasElement>(null);
   const canvasRef3 = useRef<HTMLDivElement>(null);
@@ -70,7 +80,7 @@ console.log('aca esta la imagen')
             .detectAllFaces(imageRef.current ? imageRef.current : image)
             .withFaceLandmarks()
             .withFaceExpressions();
-        
+        console.log(fullFaceDescriptions)
 
           if (fullFaceDescriptions.length > 0) {
             const newArray = fullFaceDescriptions.map(
@@ -266,19 +276,30 @@ console.log('aca esta la imagen')
           if (finalImageRef.current) {
             html2canvas(finalImageRef.current).then((capturedCanvas) => {
               const capturedImage = capturedCanvas.toDataURL("image/png");
-              const link = document.createElement("a");
+
+if(imageRef2.current){
+              imageRef2.current.src= capturedImage
+            }
+            if(linkDownloadRef.current){
+              linkDownloadRef.current.href =capturedImage
+              linkDownloadRef.current.download = 'descarga.png'
+            }
+              /* const link = document.createElement("a");
 
               link.href = capturedImage;
 
               link.download = "descarga.png";
 
-              link.click();
+              link.click(); */
+            
             });
           }
+
+          
         }, 3000);
 
         setTimeout(() => {
-         
+          setviewimageFinal(true)
           const color = document.getElementById("color-1");
           const color2 = document.getElementById("color-2");
           const color3 = document.getElementById("color-3");
@@ -369,21 +390,23 @@ console.log('aca esta la imagen')
       } else {
         console.log("lito");
         setShoot(0);
+        setFinalShoot(true)
       }
     };
 
     shootPhotos(shoot);
   };
 
-
+  const[finalShoot,setFinalShoot]=useState<boolean>(false)
+  const[viewimageFinal,setviewimageFinal]=useState<boolean>(false)
   
   const[changePage,setChangePage]=useState<string>('Home')
 
-
+  const linkDownloadRef = useRef<HTMLAnchorElement | null>(null);
 
   
     return (
-      <MainContext.Provider value={{changePage,setChangePage,loading,videoRef,KeyframesCount,canvasRef2,plantillaRef,canvasRef4,canvasRef3,imageRef,CapturePhoto,finalImageRef}}>
+      <MainContext.Provider value={{setviewimageFinal,viewimageFinal,linkDownloadRef ,imageRef2,setFinalShoot,finalShoot,shoot,changePage,setChangePage,loading,videoRef,KeyframesCount,canvasRef2,plantillaRef,canvasRef4,canvasRef3,imageRef,CapturePhoto,finalImageRef}}>
         {children}
       </MainContext.Provider>
     );
