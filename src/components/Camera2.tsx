@@ -10,7 +10,6 @@ function Camera2() {
     setFinalShoot,
     finalShoot,
     setChangePage,
-    loading,
     videoRef,
     KeyframesCount,
     canvasRef2,
@@ -164,7 +163,7 @@ function Camera2() {
 
       {instructionsSteptoStep && (
         <div className="fixed inset-0 flex flex-col items-center justify-center bg-black z-20 bg-opacity-90">
-          <div className="bounce-in-img  p-6   flex space-x-20">
+          <div className="bounce-in-img  p-6   flex flex-col md:flex-row md:space-x-20">
             <div
               className={`w-[200px] h-[200px]  flex flex-col items-center text-[#ac7fbd]`}
             >

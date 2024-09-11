@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { MainHook } from "../context/MainContext";
-import { div } from "three/webgpu";
+
 
 function Glossary() {
   const { setChangePage } = MainHook() || {};
 
-  const [changeanimation, setChangeAnimation] =
+/*   const [changeanimation, setChangeAnimation] =
     useState<string>("bounce-in-img");
 
   const Change = () => {
@@ -13,7 +13,7 @@ function Glossary() {
     setTimeout(() => {
       setChangePage("Camera");
     }, 1200);
-  };
+  }; */
 
 const ArrayFeelings = [
     {color:'#ee2225',name:'Furia',texto:'La emoción de la Furia puede surgir como respuesta a situaciones percibidas como injustas, y puede motivar a las personas a tomar medidas para corregir la situación'},
@@ -32,7 +32,7 @@ interface ModalInfo {
   texto: string;
 }
 
-const [objectModal,setObjectModal]= useState<ModalInfo | null >({name:'',color:''})
+const [objectModal,setObjectModal]= useState<ModalInfo | null >({name:'',color:'',texto:''})
 const [openModal,setOpenModal]=useState<boolean>(false)
 const ModalView = (namei:string)=>{
  
@@ -69,7 +69,7 @@ const ModalView = (namei:string)=>{
           </div>
         </div> }
       
-      <div className="w-full h-full grid grid-cols-4">
+      <div className="w-full h-full grid md:grid-cols-4 grid-cols-2">
 {
       ArrayFeelings.map((item,index)=>(
 

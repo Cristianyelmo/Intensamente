@@ -1,50 +1,56 @@
-import React, { createContext, useState,useContext , ReactNode,useEffect,useRef } from 'react';
+import React, {
+  createContext,
+  useState,
+  useContext,
+  ReactNode,
+  useEffect,
+  useRef,
+} from "react";
 import * as faceapi from "face-api.js";
 import html2canvas from "html2canvas";
 // Crear el contexto
 
 interface MainContextType {
-    loading: boolean;
-    videoRef: React.RefObject<HTMLVideoElement>;
-    KeyframesCount: string;
-    canvasRef2: React.RefObject<HTMLCanvasElement>;
-    plantillaRef: React.RefObject<HTMLDivElement>;
-    canvasRef4: React.RefObject<HTMLDivElement>;
-    canvasRef3: React.RefObject<HTMLDivElement>;
-    imageRef: React.RefObject<HTMLImageElement>;
-    imageRef2: React.RefObject<HTMLImageElement>;
-    CapturePhoto: () => void;
-    finalImageRef: React.RefObject<HTMLDivElement>;
-    changePage: string; 
-    setChangePage: (value: string) => void; 
-    shoot:number;
-    finalShoot:boolean;
-    setFinalShoot: (value: boolean) => void; 
-    linkDownloadRef:React.RefObject<HTMLAnchorElement>,
-    viewimageFinal:boolean;
-    setviewimageFinal:(value: boolean) => void; 
-   
-  }
-export const MainContext = createContext<MainContextType | null>(null);;
+  loading: boolean;
+  videoRef: React.RefObject<HTMLVideoElement>;
+  KeyframesCount: string;
+  canvasRef2: React.RefObject<HTMLCanvasElement>;
+  plantillaRef: React.RefObject<HTMLDivElement>;
+  canvasRef4: React.RefObject<HTMLDivElement>;
+  canvasRef3: React.RefObject<HTMLDivElement>;
+  imageRef: React.RefObject<HTMLImageElement>;
+  imageRef2: React.RefObject<HTMLImageElement>;
+  CapturePhoto: () => void;
+  finalImageRef: React.RefObject<HTMLDivElement>;
+  changePage: string;
+  setChangePage: (value: string) => void;
+  shoot: number;
+  finalShoot: boolean;
+  setFinalShoot: (value: boolean) => void;
+  linkDownloadRef: React.RefObject<HTMLAnchorElement>;
+  viewimageFinal: boolean;
+  setviewimageFinal: (value: boolean) => void;
+}
+export const MainContext = createContext<MainContextType | null>(null);
 export const MainHook = () => {
-    const context = useContext(MainContext);
-  
-    if (context === null) {
-      throw new Error('useMainContext must be used within a MainProvider');
-    }
-  
-    return context;
-  };
+  const context = useContext(MainContext);
 
-  interface MyProviderProps {
-    children: ReactNode;
+  if (context === null) {
+    throw new Error("useMainContext must be used within a MainProvider");
   }
-  
-  export const MainProvider: React.FC<MyProviderProps> = ({ children }) => {
-    const imageRef = useRef<HTMLImageElement>(null);
 
-    const imageRef2 = useRef<HTMLImageElement>(null);
-    const [loading, setLoading] = useState<boolean>(true);
+  return context;
+};
+
+interface MyProviderProps {
+  children: ReactNode;
+}
+
+export const MainProvider: React.FC<MyProviderProps> = ({ children }) => {
+  const imageRef = useRef<HTMLImageElement>(null);
+
+  const imageRef2 = useRef<HTMLImageElement>(null);
+  const [loading, setLoading] = useState<boolean>(true);
   const canvasRef2 = useRef<HTMLCanvasElement>(null);
   const canvasRef3 = useRef<HTMLDivElement>(null);
   const plantillaRef = useRef<HTMLDivElement | null>(null);
@@ -53,82 +59,72 @@ export const MainHook = () => {
   const [shoot, setShoot] = useState<number>(0);
   const canvasRef4 = useRef<HTMLDivElement>(null);
   const finalImageRef = useRef<HTMLDivElement>(null);
- 
+
   const [KeyframesCount, setKeyframesCount] = useState<string>("");
   const testapi = async (imageSrc: string, shootx: number) => {
     const processInfoFaceApi = async (imageSrc: string) => {
       try {
-        console.log(imageRef.current)
-        
-  
-console.log('aca esta la imagen')
-          if (imageSrc !== "no" && imageRef.current) {
-            imageRef.current.src = imageSrc;
-           
-          }
+        console.log(imageRef.current);
 
-
-          const image = new Image();
-          image.src = "/New Project(3).jpg";
-          image.width = 300;
-          image.height = 300;
-          
-         
-        console.log(imageRef.current)
-
-          const fullFaceDescriptions = await faceapi
-            .detectAllFaces(imageRef.current ? imageRef.current : image)
-            .withFaceLandmarks()
-            .withFaceExpressions();
-        console.log(fullFaceDescriptions)
-
-          if (fullFaceDescriptions.length > 0) {
-            const newArray = fullFaceDescriptions.map(
-              ({ expressions, landmarks }) => {
-                let highestExpression = "";
-                let highestValue = -Infinity;
-
-                for (const [expression, value] of Object.entries(expressions)) {
-                  if (typeof value === "number" && value > highestValue) {
-                    highestExpression = expression;
-                    highestValue = value;
-                  }
-                }
-
-                return {
-                  expression: highestExpression,
-                  landmarks: landmarks.positions,
-                };
-              }
-            );
-        
-            return newArray;
+        console.log("aca esta la imagen");
+        if (imageSrc !== "no" && imageRef.current) {
+          imageRef.current.src = imageSrc;
         }
- 
-       
+
+        const image = new Image();
+        image.src = "/New Project(3).jpg";
+        image.width = 300;
+        image.height = 300;
+
+        console.log(imageRef.current);
+
+        const fullFaceDescriptions = await faceapi
+          .detectAllFaces(imageRef.current ? imageRef.current : image)
+          .withFaceLandmarks()
+          .withFaceExpressions();
+        console.log(fullFaceDescriptions);
+
+        if (fullFaceDescriptions.length > 0) {
+          const newArray = fullFaceDescriptions.map(
+            ({ expressions, landmarks }) => {
+              let highestExpression = "";
+              let highestValue = -Infinity;
+
+              for (const [expression, value] of Object.entries(expressions)) {
+                if (typeof value === "number" && value > highestValue) {
+                  highestExpression = expression;
+                  highestValue = value;
+                }
+              }
+
+              return {
+                expression: highestExpression,
+                landmarks: landmarks.positions,
+              };
+            }
+          );
+
+          return newArray;
+        }
       } catch (error) {
         console.error("Error durante la detección facial:", error);
       } finally {
-        console.log('hasta aca llego')
+        console.log("hasta aca llego");
         setLoading(false);
       }
     };
 
-
-
     try {
       const result = await processInfoFaceApi(imageSrc);
 
-     
       const landMarksProcess = () => {
-
         if (Array.isArray(result)) {
           result.map(async (result, index) => {
-            let textureExpresionx = result.expression;
+            console.log(result.expression);
+            console.log("acaaaaa esta la imagen");
+            let textureExpresionx2 = result.expression;
 
             const landmarks = result.landmarks;
-
-      
 
             if (landmarks) {
               const point0 = landmarks[0];
@@ -191,8 +187,8 @@ console.log('aca esta la imagen')
                 if (image) {
                   image.style.width = `${newSize}px`;
                   image.style.height = `${newSize}px`;
-
-                  image.src = `/texture/${textureExpresionx}.png`;
+                  console.log(textureExpresionx2);
+                  image.src = `/texture/${textureExpresionx2}.png`;
 
                   const imageHeight = newSize;
                   const offsetX = 0;
@@ -220,38 +216,45 @@ console.log('aca esta la imagen')
       };
 
       const resultlandmarks = await landMarksProcess();
-     
+
       const screenShotImage = () => {
-        
         if (plantillaRef.current) {
           html2canvas(plantillaRef.current)
             .then((capturedCanvas) => {
               const capturedImage = capturedCanvas.toDataURL("image/png");
-          
-          
+
               const image = document.getElementById(
                 `${shootx}`
               ) as HTMLImageElement;
               if (image) {
                 image.src = capturedImage;
               } else {
-          
                 console.error("Element not found");
-                
               }
               const color = document.getElementById(`color-${shootx}`);
-            
-           
+
               if (color) {
                 const resultlandmarksLength = resultlandmarks?.length || 1;
                 color.style.display = "grid";
                 color.style.gridTemplateColumns = `repeat(${resultlandmarksLength}, 1fr)`;
               }
+              if (resultlandmarks) {
+                resultlandmarks?.map((item) => {
+                  const newDiv = document.createElement("div");
 
-              resultlandmarks?.map((item) => {
+                  newDiv.style.backgroundImage = `url('/texture/${item}.png')`;
+                  newDiv.style.backgroundRepeat = "repeat";
+                  newDiv.style.width = "100%";
+                  newDiv.style.height = "100%";
+
+                  if (color) {
+                    color.appendChild(newDiv);
+                  }
+                });
+              } else {
                 const newDiv = document.createElement("div");
 
-                newDiv.style.backgroundImage = `url('/texture/${item}.png')`;
+                newDiv.style.backgroundImage = `url('/texture/undefined.png')`;
                 newDiv.style.backgroundRepeat = "repeat";
                 newDiv.style.width = "100%";
                 newDiv.style.height = "100%";
@@ -259,7 +262,7 @@ console.log('aca esta la imagen')
                 if (color) {
                   color.appendChild(newDiv);
                 }
-              });
+              }
             })
             .then(() => {
               if (canvasRef4.current) {
@@ -277,13 +280,13 @@ console.log('aca esta la imagen')
             html2canvas(finalImageRef.current).then((capturedCanvas) => {
               const capturedImage = capturedCanvas.toDataURL("image/png");
 
-if(imageRef2.current){
-              imageRef2.current.src= capturedImage
-            }
-            if(linkDownloadRef.current){
-              linkDownloadRef.current.href =capturedImage
-              linkDownloadRef.current.download = 'descarga.png'
-            }
+              if (imageRef2.current) {
+                imageRef2.current.src = capturedImage;
+              }
+              if (linkDownloadRef.current) {
+                linkDownloadRef.current.href = capturedImage;
+                linkDownloadRef.current.download = "descarga.png";
+              }
               /* const link = document.createElement("a");
 
               link.href = capturedImage;
@@ -291,15 +294,12 @@ if(imageRef2.current){
               link.download = "descarga.png";
 
               link.click(); */
-            
             });
           }
-
-          
         }, 3000);
 
         setTimeout(() => {
-          setviewimageFinal(true)
+          setviewimageFinal(true);
           const color = document.getElementById("color-1");
           const color2 = document.getElementById("color-2");
           const color3 = document.getElementById("color-3");
@@ -320,8 +320,6 @@ if(imageRef2.current){
       console.log(console.error);
     }
   };
-
- 
 
   useEffect(() => {
     const MODEL_URL = "/models";
@@ -346,8 +344,6 @@ if(imageRef2.current){
       });
   }, []);
 
- 
-
   const CapturePhoto = async () => {
     const Capturenew = async (shootx: number) => {
       if (canvasRef2.current && imageRef.current) {
@@ -370,14 +366,13 @@ if(imageRef2.current){
 
       if (canvasRef2.current) {
         const dataURL = canvasRef2.current.toDataURL("image/png");
-     
-    
+
         await testapi(dataURL, shootx);
       }
     };
     const shootPhotos = (currentShoot: number) => {
       const audio = new Audio("/sound/sound-camera.mp3");
-     
+
       setKeyframesCount(`box${currentShoot}`);
       if (currentShoot < 3) {
         setTimeout(async () => {
@@ -390,24 +385,45 @@ if(imageRef2.current){
       } else {
         console.log("lito");
         setShoot(0);
-        setFinalShoot(true)
+        setFinalShoot(true);
       }
     };
 
     shootPhotos(shoot);
   };
 
-  const[finalShoot,setFinalShoot]=useState<boolean>(false)
-  const[viewimageFinal,setviewimageFinal]=useState<boolean>(false)
-  
-  const[changePage,setChangePage]=useState<string>('Home')
+  const [finalShoot, setFinalShoot] = useState<boolean>(false);
+  const [viewimageFinal, setviewimageFinal] = useState<boolean>(false);
+
+  const [changePage, setChangePage] = useState<string>("Home");
 
   const linkDownloadRef = useRef<HTMLAnchorElement | null>(null);
 
-  
-    return (
-      <MainContext.Provider value={{setviewimageFinal,viewimageFinal,linkDownloadRef ,imageRef2,setFinalShoot,finalShoot,shoot,changePage,setChangePage,loading,videoRef,KeyframesCount,canvasRef2,plantillaRef,canvasRef4,canvasRef3,imageRef,CapturePhoto,finalImageRef}}>
-        {children}
-      </MainContext.Provider>
-    );
-  };
+  return (
+    <MainContext.Provider
+      value={{
+        setviewimageFinal,
+        viewimageFinal,
+        linkDownloadRef,
+        imageRef2,
+        setFinalShoot,
+        finalShoot,
+        shoot,
+        changePage,
+        setChangePage,
+        loading,
+        videoRef,
+        KeyframesCount,
+        canvasRef2,
+        plantillaRef,
+        canvasRef4,
+        canvasRef3,
+        imageRef,
+        CapturePhoto,
+        finalImageRef,
+      }}
+    >
+      {children}
+    </MainContext.Provider>
+  );
+};
