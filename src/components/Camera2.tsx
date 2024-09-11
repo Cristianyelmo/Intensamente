@@ -19,7 +19,7 @@ function Camera2() {
     imageRef,
     CapturePhoto,
     finalImageRef,
-    disableButton
+    disableButton,
   } = MainHook() || {};
 
   useEffect(() => {
@@ -36,9 +36,15 @@ function Camera2() {
       }
     };
 
-    setFinalShoot(false);
-    setviewimageFinal(false);
     cargarCamera();
+  }, []);
+
+  useEffect(() => {
+    const ValueInitial = () => {
+      setFinalShoot(false);
+      setviewimageFinal(false);
+    };
+    ValueInitial();
   }, []);
 
   const [instructionsSteptoStep, setInstructionsSteptoStep] =
@@ -134,7 +140,9 @@ function Camera2() {
             espere....
           </p>
           <div
-            className={`${viewimageFinal ? "block" : "hidden"} flex flex-col items-center space-y-4`}
+            className={`${
+              viewimageFinal ? "block" : "hidden"
+            } flex flex-col items-center space-y-4`}
           >
             <img
               src=""
@@ -145,7 +153,10 @@ function Camera2() {
               className="imgFinal"
             />
             <div className="flex space-x-4">
-              <a ref={linkDownloadRef} className=" p-2 bg-black text-[#f8df6d] border-[1px] border-[#f8df6d] ">
+              <a
+                ref={linkDownloadRef}
+                className=" p-2 bg-black text-[#f8df6d] border-[1px] border-[#f8df6d] "
+              >
                 descargar
               </a>
               <button
@@ -238,7 +249,8 @@ function Camera2() {
         </div>
         <button
           onClick={CapturePhoto}
-          className=" bg-black text-white p-4 mt-10" disabled={disableButton}
+          className=" bg-black text-white p-4 mt-10"
+          disabled={disableButton}
         >
           Empieza!
         </button>
