@@ -162,23 +162,23 @@ function Camera2() {
       )}
 
       {instructionsSteptoStep && (
-        <div className="fixed inset-0 flex flex-col items-center justify-center bg-black z-20 bg-opacity-90 h-screen">
-          <div className="bounce-in-img  p-6   flex flex-col md:flex-row md:space-x-20">
+        <div className="fixed inset-0 w-full h-full flex flex-col items-center justify-center bg-black z-20 bg-opacity-90 overflow-y-auto">
+          <div className="bounce-in-img  p-10   grid md:grid-cols-4 grid-cols-1 gap-10 mt-80 ">
             <div
-              className={`w-[200px] h-[200px]  flex flex-col items-center text-[#ac7fbd]`}
+              className={` flex flex-col items-center text-[#ac7fbd]  md:w-[200px] `}
             >
               <div className="w-[100px] h-[100px] bg-black"></div>
               <h1>Paso 1</h1>
               <p>Activar la camara</p>
             </div>
 
-            <div className="w-[200px] h-[200px]  flex flex-col items-center text-[#f8df6d]">
+            <div className="   flex flex-col items-center text-[#f8df6d]  md:w-[200px] ">
               <div className="w-[100px] h-[100px] bg-black"></div>
               <h1>Paso 2</h1>
               <p>Apretar el boton de Empieza</p>
             </div>
 
-            <div className="w-[200px] h-[200px]  flex flex-col items-center text-[#89c657]">
+            <div className="   flex flex-col items-center text-[#89c657] md:w-[200px] ">
               <div className="w-[100px] h-[100px] bg-black"></div>
               <h1>Paso 3</h1>
               <p>
@@ -188,7 +188,7 @@ function Camera2() {
               </p>
             </div>
 
-            <div className="w-[200px] h-[200px] flex flex-col items-center text-[#f06eaa]">
+            <div className="  flex flex-col items-center text-[#f06eaa]  md:w-[200px] ">
               <div className="w-[100px] h-[100px] bg-black"></div>
               <h1>Paso 4</h1>
               <p>
@@ -202,7 +202,7 @@ function Camera2() {
           <div>
             <button
               onClick={() => setInstructionsSteptoStep(false)}
-              className=" px-6 py-2 text-[#f8df6d] border-[#f8df6d] border-[4px]"
+              className=" px-6 py-2 text-[#f8df6d] border-[#f8df6d] border-[4px]  mb-10"
             >
               Oki
             </button>
@@ -210,7 +210,7 @@ function Camera2() {
         </div>
       )}
 
-      <div className="flex flex-col justify-center items-center h-screen">
+      <div className="flex flex-col justify-center items-center min-h-screen">
         <div className="relative w-[300px] h-[300px] bounce-in-img">
           <div
             className={` w-[50px] z-30 h-[50px] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2  ${KeyframesCount}`}
