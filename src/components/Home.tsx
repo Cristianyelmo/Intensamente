@@ -17,7 +17,7 @@ function Home() {
     <div className="bg-[#f7ce65] min-h-screen  text-white flex justify-center md:space-x-20  overflow-hidden p-10 ">
       <div className={`hidden md:block relative w-[400px] h-[400px] ${changeanimation}`} >
         <img
-          src="/tarjeta.png"
+          src="/tarjeta2.png"
           width={350}
           height={350}
           className="absolute z-20  rotate-img2 "
@@ -30,7 +30,7 @@ function Home() {
         />
 
         <img
-          src="/tarjeta.png"
+          src="/tarjeta2.png"
           width={350}
           height={350}
           className="absolute z-20 "
@@ -43,7 +43,7 @@ function Home() {
        
         <img src="/Inside-out.png" width={400} height={400}  className="w-[300px] h-[300px] md:w-[400px] md:h-[400px]" />
 
-        <div className={`relative w-[200px] h-[400px] mt-0 ${changeanimation} md:hidden`}>
+        <div className={`relative w-[200px] h-[300px] mt-0 ${changeanimation} md:hidden`}>
         <img
           src="/tarjeta.png"
           width={200}
@@ -51,7 +51,7 @@ function Home() {
           className="absolute z-20  rotate-img2 "
         />
         <img
-          src="/tarjeta.png"
+          src="/tarjeta2.png"
           width={200}
           height={200}
           className="absolute z-20  rotate-img "

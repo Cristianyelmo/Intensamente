@@ -179,19 +179,21 @@ function Camera2() {
             <div
               className={` flex flex-col items-center text-[#ac7fbd]  md:w-[200px] `}
             >
-              <div className="w-[100px] h-[100px] bg-black"></div>
+             {/*  <div className="w-[100px] h-[100px] bg-black"></div> */}
+              <img src="/xd.svg" width={100} height={100} />
               <h1>Paso 1</h1>
+             
               <p>Activar la camara</p>
             </div>
 
             <div className="   flex flex-col items-center text-[#f8df6d]  md:w-[200px] ">
-              <div className="w-[100px] h-[100px] bg-black"></div>
+            <img src="/xd2.svg" width={100} height={100} />
               <h1>Paso 2</h1>
               <p>Apretar el boton de Empieza</p>
             </div>
 
             <div className="   flex flex-col items-center text-[#89c657] md:w-[200px] ">
-              <div className="w-[100px] h-[100px] bg-black"></div>
+            <img src="/xd3.svg" width={100} height={100} />
               <h1>Paso 3</h1>
               <p>
                 La camara va sacar fotos cada 3 segundos 3 veces y va detectar
@@ -201,7 +203,7 @@ function Camera2() {
             </div>
 
             <div className="  flex flex-col items-center text-[#f06eaa]  md:w-[200px] ">
-              <div className="w-[100px] h-[100px] bg-black"></div>
+            <img src="/xd4.svg" width={100} height={100} />
               <h1>Paso 4</h1>
               <p>
                 Una vez termina las 3 fotos,esperas un momento y te aparecera

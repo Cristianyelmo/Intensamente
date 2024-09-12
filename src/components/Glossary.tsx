@@ -16,14 +16,14 @@ function Glossary() {
   }; */
 
 const ArrayFeelings = [
-    {color:'#ee2225',name:'Furia',texto:'La emoción de la Furia puede surgir como respuesta a situaciones percibidas como injustas, y puede motivar a las personas a tomar medidas para corregir la situación'},
-    {color:'#ac7fbd',name:'fearful',texto:'El miedo mantiene a las personas alerta y vigilantes ante posibles amenazas, lo que les permite anticipar y responder a situaciones de peligro.'},
-    {color:'#49519e',name:'Ennui',texto:'Esta emocion casi coincide con la expresion que captura la IA que es la neutral,el aburrimiento es una sensacion persistente de apatia,falta de interes y energia'},
-    {color:'#f8df6d',name:'happy',texto:'La alegría motiva a las personas a buscar experiencias positivas y a disfrutar de la vida.'},
-    {color:'#144b9a',name:'sad',texto:'La tristeza permite a las personas procesar y expresar emociones difíciles, como la pérdida, la decepción o la soledad.'},
-    {color:'#89c657',name:'disgusted',texto:'La emoción de Asco actúa como un mecanismo de «evitación», ayudando a las personas a no incurrir en situaciones o estímulos que podrían ser perjudiciales o que nos pongan en peligro.'},
-    {color:'#f06eaa',name:'surprised',texto:'Esta es una emocion que no esta la pelicula,pero es una expresion que detecta la IA'},
-    {color:'#00a751',name:'Undefined',texto:'Esta carta aparece porque no pudo detectar la IA un rostro'},
+    {color:'#ee2225',name:'Furia',img:'angry',texto:'La emoción de la Furia puede surgir como respuesta a situaciones percibidas como injustas, y puede motivar a las personas a tomar medidas para corregir la situación'},
+    {color:'#4E2C78',name:'fearful',img:'fearful',texto:'El miedo mantiene a las personas alerta y vigilantes ante posibles amenazas, lo que les permite anticipar y responder a situaciones de peligro.'},
+    {color:'#49519e',name:'Ennui',img:'ennui',texto:'Esta emocion casi coincide con la expresion que captura la IA que es la neutral,el aburrimiento es una sensacion persistente de apatia,falta de interes y energia'},
+    {color:'#f8df6d',name:'happy',img:'happy',texto:'La alegría motiva a las personas a buscar experiencias positivas y a disfrutar de la vida.'},
+    {color:'#144b9a',name:'sad',img:'sad',texto:'La tristeza permite a las personas procesar y expresar emociones difíciles, como la pérdida, la decepción o la soledad.'},
+    {color:'#006C3A',name:'disgusted',img:'disgusted',texto:'La emoción de Asco actúa como un mecanismo de «evitación», ayudando a las personas a no incurrir en situaciones o estímulos que podrían ser perjudiciales o que nos pongan en peligro.'},
+    {color:'#f06eaa',name:'surprised',img:'surprised',texto:'Esta es una emocion que no esta la pelicula,pero es una expresion que detecta la IA'},
+    {color:'#000000',name:'Undefined',img:'undefined',texto:'Esta carta aparece porque no pudo detectar la IA un rostro'},
 ]
 
 interface ModalInfo {
@@ -77,8 +77,10 @@ const ModalView = (namei:string)=>{
 
 
 <div key={index} className={`bounce-in-img cursor-pointer`} onClick={()=>ModalView(item.name)}       style={{ backgroundColor:item.color,}}>
-</div>
+<img src={`/glossary/${item.img}.svg`} className="w-full h-full"/>
 
+</div>
+ 
 
       ))
 }
