@@ -52,7 +52,7 @@ function Camera2() {
 
   return (
     <div className="bg-[#f7ce65] min-h-screen ">
-      <button onClick={() => setChangePage("Home")} className="absolute z-50">
+      <button onClick={() => setChangePage("Home")} className="absolute z-50 bg-black text-white p-4 m-4">
         Volver
       </button>
 

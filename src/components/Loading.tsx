@@ -23,7 +23,7 @@ function Loading() {
        
  
     </div>
-<h1 >Cargando modelos...</h1>
+<h1 >Cargando modelos de IA...</h1>
 <p>puede tardar algunos segundos :(</p>
 </div>
 

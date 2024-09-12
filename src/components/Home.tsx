@@ -69,13 +69,13 @@ function Home() {
         <div className="flex space-x-2 justify-center">
           <button
             onClick={() => Change("Glossary")}
-            className="bg-black text-white p-2"
+            className="bg-black text-white p-4"
           >
             Glosario
           </button>
           <button
             onClick={() => Change("Camera")}
-            className="bg-black text-white p-2"
+            className="bg-black text-white p-4"
           >
             Entrar
           </button>
