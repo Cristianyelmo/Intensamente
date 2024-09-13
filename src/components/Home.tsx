@@ -13,9 +13,12 @@ function Home() {
       setChangePage(item);
     }, 1200);
   };
+
+
+  
   return (
-    <div className="bg-[#f7ce65] min-h-screen  text-white flex justify-center md:space-x-20  overflow-hidden p-10 ">
-      <div className={`hidden md:block relative w-[400px] h-[400px] ${changeanimation}`} >
+    <div className="bg-[#f7ce65] min-h-screen relative text-white flex justify-center md:space-x-20  overflow-hidden p-10 ">
+      <div className={`hidden md:block relative z-20 w-[400px] h-[400px] ${changeanimation}`} >
         <img
           src="/tarjeta2.png"
           width={350}
@@ -38,7 +41,7 @@ function Home() {
       </div>  
 
       <div
-        className={`flex flex-col items-center self-center space-y-0 md:space-y-10 ${changeanimation}`}
+        className={`flex flex-col items-center self-center space-y-0 md:space-y-10 z-20 ${changeanimation}`}
       >
        
         <img src="/Inside-out.png" width={400} height={400}  className="w-[300px] h-[300px] md:w-[400px] md:h-[400px]" />
@@ -81,6 +84,28 @@ function Home() {
           </button>
         </div>
       </div>
+
+<div className={`w-[300px] h-[300px] rounded-full bg-[#4aa80b] absolute z-10  glowing-circle2 ${changeanimation}`}>
+
+</div>
+
+
+
+
+<div className={`w-[200px] h-[200px] rounded-full bg-[#144b9a] right-[50%] top-[30%] absolute z-10 glowing-circle  ${changeanimation}`}>
+</div>
+
+
+
+
+<div className={`w-[200px] h-[200px] rounded-full bg-[#f06eaa] right-[27%] top-[40%] absolute z-10  glowing-circle3 ${changeanimation}`}>
+</div>
+
+
+<div className={`w-[150px] h-[150px] rounded-full bg-[#f06eaa] right-[10%] md:right-[20%] top-[26%] absolute z-10  glowing-circle4 ${changeanimation}`}>
+</div>
+
+    
     </div>
   );
 }

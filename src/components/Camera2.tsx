@@ -254,7 +254,7 @@ function Camera2() {
           className=" bg-black text-white p-4 mt-10"
           disabled={disableButton}
         >
-          Empieza!
+         {disableButton ? 'Expresa!' : 'Empieza!'}
         </button>
       </div>
     </div>
