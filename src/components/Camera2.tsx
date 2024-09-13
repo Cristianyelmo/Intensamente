@@ -51,7 +51,7 @@ function Camera2() {
     useState<boolean>(true);
 
   return (
-    <div className="bg-[#f7ce65] min-h-screen ">
+    <div className="bg-[#f7ce65] min-h-screen background-image">
       <button onClick={() => setChangePage("Home")} className="absolute z-50 bg-black text-white p-4 m-4">
         Volver
       </button>
@@ -225,7 +225,8 @@ function Camera2() {
       )}
 
       <div className="flex flex-col justify-center items-center min-h-screen">
-        <div className="relative w-[300px] h-[300px] bounce-in-img">
+        <div className="bg-white p-4 flex flex-col items-center bounce-in-img ">
+        <div className="relative w-[300px] h-[300px] ">
           <div
             className={` w-[50px] z-30 h-[50px] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2  ${KeyframesCount}`}
           ></div>
@@ -251,11 +252,14 @@ function Camera2() {
         </div>
         <button
           onClick={CapturePhoto}
-          className=" bg-black text-white p-4 mt-10"
+          className={`bg-black text-white p-4 mt-10 ${disableButton && 'bg-[#006C3A]'}`}
           disabled={disableButton}
         >
+          <p className={`${disableButton && 'buttonCameraProcess'}`}>
          {disableButton ? 'Expresa!' : 'Empieza!'}
+         </p>
         </button>
+        </div>
       </div>
     </div>
   );

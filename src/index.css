@@ -529,5 +529,35 @@ opacity: 0.5;
 
 
 
+
+  .background-image {
   
- 
+    background-image: url('/motivo.svg'); 
+  
+    background-repeat: repeat;
+  }
+
+
+
+
+
+  
+
+
+  @keyframes animationButtonCamera {
+    0% {
+      transform: scale(1); 
+    }
+    50% {
+      transform: scale(1.1); 
+    }
+    100% {
+      transform:scale(1); 
+    }
+  }
+  
+  .buttonCameraProcess {
+   
+    animation: animationButtonCamera 3s infinite; 
+    
+  }
